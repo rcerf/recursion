@@ -37,22 +37,27 @@ var stringifyJSON = function(obj){
 	} 
   else if(typeof(obj) === "string"){
     //maintain the printing of the quotation marks for strings.
-    // ***Look into espcaping rules***
-    return "" + obj + "" ;
+    // *** Look into espcaping rules ***
+    return "\"" + obj + "\"" ;
   }
 
   // if obj is an array
   // return map of each element passed to stringify
   // ex: [1,2,3] return [1,2,3].map(function(el){ return stringify(el)}).join(', ')
   // return result of map
-
   else if(obj instanceof Array){
     return ("[" + map(obj, function(item){
       console.log("array " + item);
       return stringifyJSON(item);
-    }).join(", ") + "]");
+    }).join(",") + "]");
   } 
 
   // return: handle objects too, again values recursive
+
+  else if(obj instanceof Object){
+    return "{" + map(obj, function(item, key){
+      return stringifyJSON(item);
+    }).join(",") + "}";
+  }
 
 }
