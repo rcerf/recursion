@@ -1,49 +1,58 @@
-// this is what you would do if you liked things to be easy:
-// var stringifyJSON = JSON.stringify;
+var each = function(collection, iterator) {
+  if(Array.isArray(collection)){
+    for(var i =0; i<collection.length; i++){
+      iterator(collection[i], i, collection);
+    }
+  } else {
+    for(var key in collection){
+      iterator(collection[key], key, collection);
+    }
+  }
 
-// but you don't so you're going to have to write it from scratch:
-var stringifyJSON = function (obj) {
-
-	var stringifiedObj = "";
-	var stringify = function(item){
-		stringifiedObj = stringifiedObj+", "+item;
-	}
-	//Test if obj is a string
-	if(typeof(obj) === "string"){
-		stringify(obj);
-	}
-	//Test if obj is Array
-	if(obj instanceof Array){
-		//pull out elements from array
-		for(var i=0; i<obj.length; i++){
-			//TEST: if element is empty
-			if(obj[i].length === 0){
-				stringify("[]");
-			//TEST: if element is an object
-			}else if(obj[i] instanceof Object){
-				//recurse
-				stringifyJSON(obj[i]);
-			}else{
-				stringify(obj[i]);
-			}
-		}
-	}
-	//If obj is Object
-	if(obj instanceof Object){
-		//Pull out 1 element from object
-		for(var property in obj){
-			//test if object is empty
-			}if(obj[property].length === 0){
-				stringify("{}");
-			//TEST: if element is embeded object
-			}else if(obj[property] instanceof Object){
-				//recurse
-				stringifyJSON(obj[property]);
-			}else{
-				//stringify element
-				stringify(obj[property]);
-			}
-		}
-	}
-	console.log(stringifiedObj);
 };
+
+// Return the results of applying an iterator to each element.
+var map = function(array, iterator) {
+  // map() is a useful primitive iteration function that works a lot
+  // like each(), but in addition to running the operation on all
+  // the members, it also maintains an array of results.
+  var results = [];
+  each(array, function(value, index){
+    var result = iterator(value);
+    results.push(result);
+    console.log("result returned " + result);
+  });
+  
+  return results;
+};
+
+//Recursive stringify function
+var stringifyJSON = function(obj){
+
+	// if bool, string, num, null, undefined
+	// return '' + obj (string version)
+	if(typeof(obj) === "number" || typeof(obj) === "boolean" || obj == undefined){
+      console.log("primitive " + obj);
+  		return String(obj);
+	} 
+  else if(typeof(obj) === "string"){
+    //maintain the printing of the quotation marks for strings.
+    // ***Look into espcaping rules***
+    return "" + obj + "" ;
+  }
+
+  // if obj is an array
+  // return map of each element passed to stringify
+  // ex: [1,2,3] return [1,2,3].map(function(el){ return stringify(el)}).join(', ')
+  // return result of map
+
+  else if(obj instanceof Array){
+    return ("[" + map(obj, function(item){
+      console.log("array " + item);
+      return stringifyJSON(item);
+    }).join(", ") + "]");
+  } 
+
+  // return: handle objects too, again values recursive
+
+}
