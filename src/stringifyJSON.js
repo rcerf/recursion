@@ -9,13 +9,15 @@ var stringifyJSON = function(obj){
 	// if bool, string, num, null, undefined
 	// return '' + obj (string version)
 	if(typeof(obj) === "number" || typeof(obj) === "boolean" || obj === null){
-      console.log("primitive " + obj);
   		return String(obj);
 	} 
+
+  if(obj instanceof Function || obj === undefined){
+    return;
+  }
  
  if(typeof(obj) === "string"){
     //maintain the printing of the quotation marks for strings.
-    console.log(obj);
     return "\"" + obj + "\"" ;
   }
 
@@ -45,9 +47,12 @@ var stringifyJSON = function(obj){
     // handle objects
 
       for(key in obj){
-        v = stringifyJSON(obj[key]);
         k = stringifyJSON(key);
-        partial.push(k + ":" + v);
+        v = stringifyJSON(obj[key]);
+        
+        if(v){
+          partial.push(k + ":" + v);
+        }
       }
     }
     
