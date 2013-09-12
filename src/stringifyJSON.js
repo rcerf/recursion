@@ -64,3 +64,9 @@ var stringifyJSON = function(obj){
   }
 
 }
+
+var stringifyArray = function() {
+  "[" + _.map(obj, function(item, key) {
+    return stringifyJSON(key) + ":" + ;
+  }).join(",") + "]"
+};
