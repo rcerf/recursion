@@ -13,29 +13,24 @@ var getElementsByClassName = function (className) {
 		//...traverse starting with document.body
 		// pushes to resultsArray if a match
 
-		var nodesClassArray = node.classList;
-		var l = node.childNodes.length;
+		if(node.classList){
+			if(node.classList.contains(className)){
 
-		if(!nodesClassArray){
-			return;
-		}
-		
-		if(nodesClassArray.contains(className)){
+				resultsArray.push(node);
 
-			resultsArray.push(node);
-
+			}
 		}
 
 		
-
-		for(var i = 0; i<l; i++) {
-
-			traverseDom(className, node.childNodes[i]);
+		if (node.childNodes) {
+			for(var i = 0; i<node.childNodes.length; i++) {
+				traverseDom(className, node.childNodes[i]);
+			}
 		}
 	};
 
 	traverseDom(className, document.body);	
-	console.log(resultsArray);
+
 	return resultsArray;
 
 
